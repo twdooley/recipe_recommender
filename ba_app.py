@@ -4,6 +4,7 @@ import tensorflow as tf
 from sklearn.neighbors import NearestNeighbors
 from tensorflow.keras.preprocessing import image as imgx
 import numpy as np
+import pandas as pd
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 import pickle
 from numpy.linalg import norm
@@ -12,6 +13,8 @@ import cv2
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+
+df = pd.read_csv('w_urls.csv')
 
 st.title("I'll Bake What She's Having!")
 st.markdown("### Scan or upload an image below by clicking the browse files button. You'll then be able to take a photo if on a phone.")
@@ -50,6 +53,12 @@ if uploaded_file is not None:
     st.write("") 
     listed = list(indices[0])
     for num in range(10):
+        title = df[df.file == filenames[listed[num]].replace('/Users/timothydooley/Documents/ds/metis/repos/ba_scrape/ba_images/', '').replace('.jpg', '')].name.to_string(index = False).strip()
+        get_url = df[df.file == filenames[listed[num]].replace('/Users/timothydooley/Documents/ds/metis/repos/ba_scrape/ba_images/', '').replace('.jpg', '')].url.to_string(index = False).strip()
+        final_url = f"www.bonappetit.com{get_url}"
+        concat_url = f"[{title}]({final_url})"
+        st.markdown(f"## {concat_url}", unsafe_allow_html=True)
+            
         st.image(filenames[listed[num]], use_column_width = True)
 
 
